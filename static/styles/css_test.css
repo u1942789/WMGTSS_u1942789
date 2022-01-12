@@ -1,3 +1,21 @@
 header {
+}
+
+body {
+    margin: 0;
+}
+
+.heading_div {
+    font-family: "Verdana";
     text-align: center;
+    font-size: 64px;
+    border-style: solid;
+    background-color: #00407A;
+}
+
+.heading_paragraph {
+    margin: 16px;
+    border-style: solid;
+    background-color: #FFF;
+    padding: 16px;
 }
