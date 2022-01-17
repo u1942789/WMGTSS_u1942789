@@ -10,12 +10,18 @@
     <p class="heading_paragraph">Q&A Board</p>
 </div>
 <div class="sorter_div">
-    <button class="sorter_button" type="button">Oldest</button>
+    <!-- The initial button is set to "Oldest". This is because it is assumed that the oldest question will want to be
+    seen first. This encourages a FIFO approach to the Q&A board, and old questions will not be buried under new
+    ones. -->
+    <button id="initial_button" class="sorter_button" type="button">Oldest</button>
     <button class="sorter_button" type="button">Newest</button>
     <button class="sorter_button" type="button">Most Liked</button>
     <button class="sorter_button" type="button">Least Liked</button>
     <button class="sorter_button" type="button">Your Questions</button>
     <button class="sorter_button" type="button">Your Liked Questions</button>
+</div>
+<div>
+    
 </div>
 </body>
 </html>
