@@ -1,15 +1,16 @@
 body {
     background-color: #FFF;
-    border-width: 1px;
     font-family: "Verdana";
     margin: 0;
 }
+
+/* Heading */
 
 .heading_div {
     background-color: #4D79A2;
     border-style: solid;
     border-width: 2px;
-    font-size: 64px;
+    font-size: 48px;
     text-align: center;
 }
 
@@ -20,6 +21,8 @@ body {
     margin: 16px;
     padding: 16px;
 }
+
+/* Sorter Buttons */
 
 .sorter_div {
     background-color: #FFF;
