@@ -1,19 +1,10 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, redirect, url_for, request
 
 app = Flask(__name__)
 
-# Might not be able to implement the reply feature.
-# Might not be able to implement comment liking.
-# May require a comment database.
-questions = [
-    # Question ID, Question Name, Question Asker, Date, Answer, Comments, Likes
-    [1, "How do I use HTML?", "Joe, M.", "13/11/2021", "This is the answer.", ["Comment 1", "Comment 2"], ["User1", "User2", "User3"]],
-    [2, "Has the assignment been released yet?", "Ben, D.", "15/11/2021", "This is the answer.", [], ["User2", "User3"]]
-]
-
 
 @app.route("/")
-def test():
+def default():
     return redirect(url_for("login"))
 
 
@@ -24,7 +15,7 @@ def login():
         password = request.form["password"]
         print(username)
         print(password)
-        return redirect(url_for("home"))
+        return redirect(url_for("qanda_board_select"))
     else:
         return render_template("login_template.html")
 
@@ -34,9 +25,14 @@ def home():
     return render_template("home_template.html")
 
 
-@app.route("/qa_home")
-def qa_home():
-    return render_template("qa_home_template.html", questions=questions)
+@app.route("/qanda_board_select")
+def qanda_board_select():
+    return render_template("qanda_board_select_template.html")
+
+
+@app.route("/qanda_board")
+def qanda_board():
+    return render_template("qanda_board_template.html")
 
 
 if __name__ == "__main__":
