@@ -17,11 +17,6 @@ def test():
     return redirect(url_for("login"))
 
 
-@app.route("/qa_home")
-def qa_home():
-    return render_template("qa_home_template.html", questions=questions)
-
-
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -29,9 +24,19 @@ def login():
         password = request.form["password"]
         print(username)
         print(password)
-        return render_template("home_template.html")
+        return redirect(url_for("home"))
     else:
         return render_template("login_template.html")
+
+
+@app.route("/home")
+def home():
+    return render_template("home_template.html")
+
+
+@app.route("/qa_home")
+def qa_home():
+    return render_template("qa_home_template.html", questions=questions)
 
 
 if __name__ == "__main__":
