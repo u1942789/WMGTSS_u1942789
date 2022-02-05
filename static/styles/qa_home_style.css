@@ -60,3 +60,59 @@ body {
 
 .like_button {
 }
+
+.like_paragraph {
+    font-size: 12px;
+
+    text-align: center;
+}
+
+.like_counter {
+    border-style: solid;
+    border-width: 2px;
+
+    font-size: 12px;
+
+    text-align: center;
+}
+
+.question_name {
+    font-size: 24px;
+}
+
+.asker {
+    font-size: 12px;
+}
+
+.answer_button {
+    background-color: #747576;
+
+    border-color: #000;
+    border-radius: 4px;
+    border-style: solid;
+
+    font-family: "Verdana";
+    font-size: 12px;
+}
+
+.comment_button {
+    background-color: #747576;
+
+    border-color: #000;
+    border-radius: 4px;
+    border-style: solid;
+
+    font-family: "Verdana";
+    font-size: 12px;
+}
+
+.delete_button {
+    background-color: #B85A58;
+
+    border-color: #000;
+    border-radius: 4px;
+    border-style: solid;
+
+    font-family: "Verdana";
+    font-size: 12px;
+}
