@@ -30,7 +30,7 @@
     <input class="like_button" type="image" src="{{ url_for('static',filename='resources/unliked_triangle.png') }}" width="40" height="40"/>
     <p class="like_paragraph">Like</p>
     <p class="like_counter">0</p>
-    <p class="question_name">How do I use HTML?</p>
+    <p class="question_name">{{ question[1] }}</p>
     <p class="asker">Asked by Joe, M. on 13/11/2021.</p>
     <button class="answer_button">Answer...</button>
     <button class="comment_button">0 comments...</button>
