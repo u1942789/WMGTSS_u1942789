@@ -1,17 +1,22 @@
 body {
     background-color: #E0E0E0;
-    border-style: solid;
     font-family: "Verdana";
     margin: 0px;
 }
 
 .heading_div {
     background-color: #4D79A2;
+    border-style: solid;
+    border-width: 2px;
+    padding: 16px;
 }
 
 .heading_paragraph {
     background-color: #FFF;
+    border-style: solid;
+    border-width: 2px;
+    font-size: 48px;
     margin: 0px;
-    padding: 0px;
+    padding: 8px;
     text-align: center;
 }
