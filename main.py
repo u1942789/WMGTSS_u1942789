@@ -14,6 +14,24 @@ qanda_boards = [QAndABoard(1, "Class 1", "Tutor1"),
                 QAndABoard(2, "Class 2", "Tutor2")]
 
 
+class Question:
+    def __init__(self, question_id, qanda_board_id, name, asker, date, answer, likes, comments):
+        self.question_id = question_id
+        self. qanda_board_id = qanda_board_id
+        self.name = name
+        self.asker = asker
+        self.date = date
+        self.answer = answer
+        self.likes = likes
+        self.comments = comments
+
+
+questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "This is the answer on how to use HTML.",
+                      ["Student1", "Student2", "Student3"], []),
+             Question(2, 1, "Has the assignment been released yet?", "Student2", "15/11/2021", "",
+                      ["Student2", "Student3"], [])]
+
+
 @app.route("/")
 def default():
     return redirect(url_for("login"))
@@ -46,7 +64,8 @@ def qanda_board_select():
 def qanda_board(qanda_board_id):
     for q in qanda_boards:
         if q.qanda_board_id == qanda_board_id:
-            return render_template("qanda_board_template.html", qanda_board=q)
+            # Pass the chosen Q&A board as well as the list of all questions.
+            return render_template("qanda_board_template.html", qanda_board=q, questions=questions)
     # If the passed ID is not found as a board, then redirect to "default", which will redirect to the "login" page.
     return redirect(url_for("default"))
 
