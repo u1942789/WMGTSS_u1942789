@@ -10,8 +10,8 @@ class QAndABoard:
         self.creator = creator
 
 
-qanda_boards = [QAndABoard(1, "Class1", "Tutor1"),
-                QAndABoard(2, "Class2", "Tutor2")]
+qanda_boards = [QAndABoard(1, "Class 1", "Tutor1"),
+                QAndABoard(2, "Class 2", "Tutor2")]
 
 
 @app.route("/")
@@ -41,9 +41,9 @@ def qanda_board_select():
     return render_template("qanda_board_select_template.html", qanda_boards=qanda_boards)
 
 
-@app.route("/<qanda_board_id>")
-def qanda_board(qanda_board_id):
-    return render_template("qanda_board_template.html", qanda_board_id=qanda_board_id)
+@app.route("/<qanda_board>")
+def qanda_board(qanda_board):
+    return render_template("qanda_board_template.html", qanda_board=qanda_board)
 
 
 if __name__ == "__main__":
