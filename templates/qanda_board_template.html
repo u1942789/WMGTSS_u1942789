@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="{{ url_for('static',filename='resources/logo.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qa_home_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_style.css') }}">
     <title>WMG Teaching Support System</title>
 </head>
 <body>
@@ -23,20 +23,21 @@
     <button class="sorter_button" type="button">Your Liked Questions</button>
 </div>
 
-<!-- Question List (1 Instance) -->
-
+<!-- Question List (1 Instance)
 {% for question in questions %}
+    {{ question[1] }}
+{% endfor %}
+-->
 <div class="question_div">
     <input class="like_button" type="image" src="{{ url_for('static',filename='resources/unliked_triangle.png') }}" width="40" height="40"/>
     <p class="like_paragraph">Like</p>
     <p class="like_counter">0</p>
-    <p class="question_name">{{ question[1] }}</p>
+    <p class="question_name">How do I use HTML?</p>
     <p class="asker">Asked by Joe, M. on 13/11/2021.</p>
     <button class="answer_button">Answer...</button>
     <button class="comment_button">0 comments...</button>
     <button class="delete_button">Delete</button>
 </div>
-{% endfor %}
 
 <div class="footer">
     <button class="back_button">Back to board select...</button>

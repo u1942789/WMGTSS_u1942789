@@ -3,10 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="{{ url_for('static',filename='resources/logo.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qa_home_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_select_style.css') }}">
     <title>WMG Teaching Support System</title>
 </head>
 <body>
-
+{% for qanda_board in qanda_boards %}
+<div>
+    <p> {{ qanda_board.qanda_board_id }} </p>
+    <p> {{ qanda_board.name }} </p>
+    <p> {{ qanda_board.creator }} </p>
+    <button onclick="{{ url_for('qanda_board', qanda_board_name=qanda_board.name) }}"> {{ qanda_board.name }} </button>
+</div>
+{% endfor %}
 </body>
 </html>
