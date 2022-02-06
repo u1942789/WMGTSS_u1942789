@@ -22,8 +22,12 @@ class Question:
         self.asker = asker
         self.date = date
         self.answer = answer
+
         self.likes = likes
+        self.number_of_likes = len(self.likes)
+
         self.comments = comments
+        self.number_of_comments = len(comments)
 
 
 questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "This is the answer on how to use HTML.",
@@ -64,8 +68,13 @@ def qanda_board_select():
 def qanda_board(qanda_board_id):
     for q in qanda_boards:
         if q.qanda_board_id == qanda_board_id:
-            # Pass the chosen Q&A board as well as the list of all questions.
-            return render_template("qanda_board_template.html", qanda_board=q, questions=questions)
+            valid_questions = []
+            # Only pass questions that relate to the selected Q&A board.
+            for question in questions:
+                if question.qanda_board_id == qanda_board_id:
+                    valid_questions.append(question)
+            # Pass the chosen Q&A board as well as the list of all valid questions.
+            return render_template("qanda_board_template.html", qanda_board=q, questions=valid_questions)
     # If the passed ID is not found as a board, then redirect to "default", which will redirect to the "login" page.
     return redirect(url_for("default"))
 

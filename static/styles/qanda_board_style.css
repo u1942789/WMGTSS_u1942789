@@ -81,7 +81,7 @@ body {
 .like_paragraph {
     font-size: 12px;
 
-    text-align: center;
+    /* text-align: center; */
 }
 
 .like_counter {
@@ -90,7 +90,7 @@ body {
 
     font-size: 12px;
 
-    text-align: center;
+    /* text-align: center; */
 }
 
 .question_name {
