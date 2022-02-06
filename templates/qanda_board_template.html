@@ -10,7 +10,7 @@
 
 <!-- Heading -->
 <div class="heading_div">
-    <p class="heading_paragraph">Q&A Board</p>
+    <p class="heading_paragraph"> {{ qanda_board.name }} </p>
 </div>
 
 <!-- Sorter Buttons -->
@@ -23,11 +23,7 @@
     <button class="sorter_button" type="button">Your Liked Questions</button>
 </div>
 
-<!-- Question List (1 Instance)
-{% for question in questions %}
-    {{ question[1] }}
-{% endfor %}
--->
+<!-- Question List -->
 <div class="question_div">
     <input class="like_button" type="image" src="{{ url_for('static',filename='resources/unliked_triangle.png') }}" width="40" height="40"/>
     <p class="like_paragraph">Like</p>
@@ -40,8 +36,10 @@
 </div>
 
 <div class="footer">
-    <button class="back_button">Back to board select...</button>
-    <button class="ask_button">Ask a question...</button>
+    <button type="submit" class="ask_button">Ask a question...</button>
+    <form method="get" action="/qanda_board_select">
+        <button type="submit" class="back_button">Back to board select...</button>
+    </form>
 </div>
 
 </body>

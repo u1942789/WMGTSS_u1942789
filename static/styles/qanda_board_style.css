@@ -36,8 +36,11 @@ body {
     border-width: 2px;
     margin: 18px;
 
+    /*
+    Removing this part for now. Causes more bad than good.
     position: sticky;
     top: 132px;
+    */
 }
 
 #initial_button{
