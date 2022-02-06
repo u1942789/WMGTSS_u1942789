@@ -10,8 +10,8 @@ class QAndABoard:
         self.creator = creator
 
 
-qanda_boards = [QAndABoard(1, "Class 1", "Tutor1"),
-                QAndABoard(2, "Class 2", "Tutor2")]
+qanda_boards = [QAndABoard(1, "Computer Science", "Tutor1"),
+                QAndABoard(2, "Mathematics", "Tutor2")]
 
 
 class Question:
@@ -76,6 +76,7 @@ def qanda_board(qanda_board_id):
             # Pass the chosen Q&A board as well as the list of all valid questions.
             return render_template("qanda_board_template.html", qanda_board=q, questions=valid_questions)
     # If the passed ID is not found as a board, then redirect to "default", which will redirect to the "login" page.
+    # Could create an error 404 page later.
     return redirect(url_for("default"))
 
 

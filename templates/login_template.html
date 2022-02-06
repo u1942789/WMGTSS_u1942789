@@ -3,16 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <link rel="icon" href="{{ url_for('static',filename='resources/logo.png') }}">
-    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/dirty_style.css') }}">
     <title>WMG Teaching Support System</title>
 </head>
 <body>
-<form method="POST">
-    <p>Username:</p>
-    <input type="text" name="username">
-    <p>Password:</p>
-    <input type="text" name="password">
-    <button type="submit">Submit</button>
-</form>
+
+<div class="dirty_form">
+    <form method="POST">
+        <p>Username:</p>
+        <input type="text" name="username">
+        <p>Password:</p>
+        <input type="text" name="password">
+        <button type="submit">Submit</button>
+    </form>
+</div>
+
 </body>
 </html>

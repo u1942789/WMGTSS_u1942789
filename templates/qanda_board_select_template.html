@@ -4,18 +4,28 @@
     <meta charset="UTF-8">
     <link rel="icon" href="{{ url_for('static',filename='resources/logo.png') }}">
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_select_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/lh_style.css') }}">
     <title>WMG Teaching Support System</title>
 </head>
 <body>
+
 {% for qanda_board in qanda_boards %}
-<div class="box">
+<div class="question_div">
     <form method="GET" action="/{{ qanda_board.qanda_board_id }}">
-    <!-- <p> {{ qanda_board.qanda_board_id }} </p> -->
-    <p> {{ qanda_board.name }} </p>
-    <p> {{ qanda_board.creator }} </p>
-    <button type="submit"> Select </button>
+    <p>Topic: {{ qanda_board.name }} </p>
+    <p>Creator: {{ qanda_board.creator }} </p>
+    <button type="submit" class="answer_button"> Select </button>
     </form>
 </div>
 {% endfor %}
+
+<div class="footer">
+    <button type="submit" class="ask_button">Create a Q&A...</button>
+    <form method="get" action="/home">
+        <button type="submit" class="back_button">Back to home...</button>
+    </form>
+</div>
+
 </body>
 </html>
