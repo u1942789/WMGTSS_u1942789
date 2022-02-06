@@ -2,15 +2,16 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" href="{{ url_for('static',filename='resources/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_style.css') }}">
     <title>WMG Teaching Support System</title>
 </head>
 <body>
 
 <form method="POST">
-    <label for="username">Username:</label><br>
-    <input type="text" id="username" name="username"><br>
-    <label for="password">Password:</label><br>
-    <input type="password" id="password" name="password"><br><br>
+    <label for="question">Question:</label><br>
+    <!-- Meet requirement character max length for a question. -->
+    <textarea style="width:300px; height:150px;" id="question" name="question" maxlength="256"></textarea><br>
     <input type="submit" value="Submit">
 </form>
 

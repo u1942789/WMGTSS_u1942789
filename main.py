@@ -38,7 +38,7 @@ questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "Thi
 
 # Have the default path redirect to the login page.
 @app.route("/", methods=["GET", "POST"])
-@app.route("/login", methods=["GET", "POST"])
+@app.route("/login/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
@@ -50,18 +50,18 @@ def login():
         return render_template("login_template.html")
 
 
-@app.route("/home")
+@app.route("/home/")
 def home():
     return render_template("home_template.html")
 
 
-@app.route("/qanda_board_select")
+@app.route("/qanda_board_select/")
 def qanda_board_select():
     return render_template("qanda_board_select_template.html", qanda_boards=qanda_boards)
 
 
 # Need to use "int:" else a String is returned.
-@app.route("/<int:qanda_board_id>")
+@app.route("/<int:qanda_board_id>/")
 def qanda_board(qanda_board_id):
     for q in qanda_boards:
         if q.qanda_board_id == qanda_board_id:
@@ -77,9 +77,14 @@ def qanda_board(qanda_board_id):
     return redirect(url_for("/"))
 
 
-@app.route("/ask_question")
-def ask_question():
-    return render_template("ask_question_template.html")
+@app.route("/<int:qanda_board_id>/ask_question/", methods=['GET', 'POST'])
+def ask_question(qanda_board_id):
+    if request.method == "POST":
+        question = request.form["question"]
+        print(question)
+        return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
+    else:
+        return render_template("ask_question_template.html")
 
 
 if __name__ == "__main__":
