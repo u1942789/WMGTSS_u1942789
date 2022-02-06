@@ -60,12 +60,12 @@ def qanda_board_select():
     return render_template("qanda_board_select_template.html", qanda_boards=qanda_boards)
 
 
-@app.route("/create_qanda/", methods=['GET', 'POST'])
+@app.route("/qanda_board_select/create_qanda/", methods=['GET', 'POST'])
 def create_qanda():
     if request.method == "POST":
         topic = request.form["topic"]
         print(topic)
-        return redirect(url_for("create_qanda"))
+        return redirect(url_for("qanda_board_select"))
     else:
         return render_template("create_qanda_template.html")
 
