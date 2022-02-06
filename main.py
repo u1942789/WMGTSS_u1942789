@@ -41,9 +41,14 @@ def qanda_board_select():
     return render_template("qanda_board_select_template.html", qanda_boards=qanda_boards)
 
 
-@app.route("/<qanda_board>")
-def qanda_board(qanda_board):
-    return render_template("qanda_board_template.html", qanda_board=qanda_board)
+# Need to use "int:" else a String is returned.
+@app.route("/<int:qanda_board_id>")
+def qanda_board(qanda_board_id):
+    for q in qanda_boards:
+        if q.qanda_board_id == qanda_board_id:
+            return render_template("qanda_board_template.html", qanda_board=q)
+    # If the passed ID is not found as a board, then redirect to "default", which will redirect to the "login" page.
+    return redirect(url_for("default"))
 
 
 if __name__ == "__main__":

@@ -10,10 +10,10 @@
 {% for qanda_board in qanda_boards %}
 <div class="box">
     <form method="GET" action="/{{ qanda_board.qanda_board_id }}">
-    <p> {{ qanda_board.qanda_board_id }} </p>
+    <!-- <p> {{ qanda_board.qanda_board_id }} </p> -->
     <p> {{ qanda_board.name }} </p>
     <p> {{ qanda_board.creator }} </p>
-    <button type="submit"> Access: {{ qanda_board.name }} </button>
+    <button type="submit"> Select </button>
     </form>
 </div>
 {% endfor %}
