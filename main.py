@@ -41,9 +41,9 @@ def qanda_board_select():
     return render_template("qanda_board_select_template.html", qanda_boards=qanda_boards)
 
 
-@app.route("/<qanda_board_name>")
-def qanda_board():
-    return render_template("qanda_board_template.html")
+@app.route("/<qanda_board_id>")
+def qanda_board(qanda_board_id):
+    return render_template("qanda_board_template.html", qanda_board_id=qanda_board_id)
 
 
 if __name__ == "__main__":

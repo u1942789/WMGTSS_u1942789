@@ -8,11 +8,13 @@
 </head>
 <body>
 {% for qanda_board in qanda_boards %}
-<div>
+<div class="box">
+    <form method="GET" action="/{{ qanda_board.qanda_board_id }}">
     <p> {{ qanda_board.qanda_board_id }} </p>
     <p> {{ qanda_board.name }} </p>
     <p> {{ qanda_board.creator }} </p>
-    <button onclick="{{ url_for('qanda_board', qanda_board_name=qanda_board.name) }}"> {{ qanda_board.name }} </button>
+    <button type="submit"> Access: {{ qanda_board.name }} </button>
+    </form>
 </div>
 {% endfor %}
 </body>
