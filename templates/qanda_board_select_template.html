@@ -12,18 +12,23 @@
 
 {% for qanda_board in qanda_boards %}
 <div class="question_div">
-    <form method="GET" action="/{{ qanda_board.qanda_board_id }}">
     <p>Topic: {{ qanda_board.name }} </p>
     <p>Creator: {{ qanda_board.creator }} </p>
-    <button type="submit" class="answer_button"> Select </button>
+    <form method="GET" action="/{{ qanda_board.qanda_board_id }}">
+        <button type="submit" class="answer_button"> Select </button>
+    </form>
+    <form>
+        <button class="delete_button">Delete</button>
     </form>
 </div>
 {% endfor %}
 
 <div class="footer">
-    <button type="submit" class="ask_button">Create a Q&A...</button>
-    <form method="get" action="/home">
+    <form method="GET" action="/home">
         <button type="submit" class="back_button">Back to home...</button>
+    </form>
+    <form>
+        <button type="submit" class="ask_button">Create a Q&A...</button>
     </form>
 </div>
 

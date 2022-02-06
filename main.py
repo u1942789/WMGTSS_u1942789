@@ -36,11 +36,8 @@ questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "Thi
                       ["Student2", "Student3"], [])]
 
 
-@app.route("/")
-def default():
-    return redirect(url_for("login"))
-
-
+# Have the default path redirect to the login page.
+@app.route("/", methods=["GET", "POST"])
 @app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
@@ -77,7 +74,12 @@ def qanda_board(qanda_board_id):
             return render_template("qanda_board_template.html", qanda_board=q, questions=valid_questions)
     # If the passed ID is not found as a board, then redirect to "default", which will redirect to the "login" page.
     # Could create an error 404 page later.
-    return redirect(url_for("default"))
+    return redirect(url_for("/"))
+
+
+@app.route("/ask_question")
+def ask_question():
+    return render_template("ask_question_template.html")
 
 
 if __name__ == "__main__":
