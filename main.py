@@ -7,9 +7,9 @@ app.secret_key = "pleasecanthisbeagoodsubmission"
 
 
 class QAndABoard:
-    def __init__(self, qanda_board_id, name, creator):
+    def __init__(self, qanda_board_id, topic, creator):
         self.qanda_board_id = qanda_board_id
-        self.name = name
+        self.topic = topic
         self.creator = creator
 
 
@@ -129,6 +129,10 @@ def create_qanda():
                 print("Asker: " + asker)
                 qanda_board_object = QAndABoard(potential_qanda_board_id, topic, asker)
                 qanda_boards.append(qanda_board_object)
+            else:
+                print("Please enter a topic.")
+                flash("Please enter a topic.", "info")
+                return render_template("create_qanda_template.html")
             return redirect(url_for("qanda_board_select"))
         else:
             return render_template("create_qanda_template.html")
@@ -181,6 +185,10 @@ def ask_question(qanda_board_id):
                 print("Date: " + date)
                 question_object = Question(potential_question_id, qanda_board_id, question, asker, date)
                 questions.append(question_object)
+            else:
+                print("Please enter a question.")
+                flash("Please enter a question.", "info")
+                return render_template("ask_question_template.html")
             return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
         else:
             return render_template("ask_question_template.html")

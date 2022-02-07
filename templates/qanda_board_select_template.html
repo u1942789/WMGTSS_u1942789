@@ -12,7 +12,7 @@
 
 {% for qanda_board in qanda_boards %}
 <div class="question_div">
-    <p class="question_name">{{ qanda_board.name }}</p>
+    <p class="question_name">{{ qanda_board.topic }}</p>
     <p class="asker"> Created by {{ qanda_board.creator }}.</p>
     <form method="GET" action="/{{ qanda_board.qanda_board_id }}">
         <button type="submit" class="answer_button"> Select </button>

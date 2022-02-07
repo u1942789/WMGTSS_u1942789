@@ -6,13 +6,20 @@
     <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_style.css') }}">
     <title>WMG Teaching Support System</title>
 </head>
-<body>
+<body style="display:flex;">
 
-<form method="POST">
+<form class="center_form" method="POST">
     <label for="topic">Topic:</label><br>
     <!-- Meet requirement character max length for a question. -->
     <textarea style="width:300px; height:150px;" id="topic" name="topic" maxlength="256"></textarea><br>
     <input type="submit" value="Submit">
+    {% with messages = get_flashed_messages() %}
+        {% if messages %}
+            {% for msg in messages %}
+                <p>{{msg}}</p>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
 </form>
 
 </body>
