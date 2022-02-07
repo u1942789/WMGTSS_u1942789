@@ -38,7 +38,9 @@
     <div class="button_box">
         <button class="answer_button">Answer...</button>
         <button class="comment_button">{{question.number_of_comments}} comments...</button>
-        <button class="delete_button">Delete</button>
+        <form action="/{{ question.qanda_board_id }}/{{ question.question_id }}/delete/">
+            <button class="delete_button">Delete</button>
+        </form>
     </div>
 </div>
 {% endfor %}

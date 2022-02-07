@@ -43,10 +43,10 @@ questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "Thi
                       ["Student2", "Student3"], [])]
 
 
-credentials = [["Tutor1", "pass"],
-               ["Tutor2", "word"],
-               ["Student1", "stu"],
-               ["Student2", "dent"]]
+credentials = [["Tutor1", "pass", True],
+               ["Tutor2", "word", True],
+               ["Student1", "stu", False],
+               ["Student2", "dent", False]]
 
 
 # Have the default path redirect to the login page.
@@ -194,6 +194,14 @@ def ask_question(qanda_board_id):
             return render_template("ask_question_template.html")
     else:
         return redirect(url_for("login"))
+
+
+@app.route("/<qanda_board_id>/<int:question_id>/delete/")
+def delete_question(qanda_board_id, question_id):
+    for question in questions:
+        if question.question_id == question_id:
+            questions.remove(question)
+    return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
 
 
 if __name__ == "__main__":
