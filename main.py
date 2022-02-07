@@ -1,7 +1,7 @@
-from flask import Flask, render_template, redirect, url_for, request
-from flask_login import LoginManager, login_required, login_user, logout_user, current_user
+from flask import Flask, redirect, url_for, render_template, request, session
 
 app = Flask(__name__)
+app.secret_key = "pleasecanthisbeagoodsubmission"
 
 
 class QAndABoard:
@@ -44,16 +44,28 @@ def login():
     if request.method == "POST":
         username = request.form["username"]
         password = request.form["password"]
-        print(username)
-        print(password)
+        session["user"] = username
         return redirect(url_for("home"))
     else:
+        # If the user is already logged in then redirect to home.
+        if "user" in session:
+            return redirect(url_for("home"))
         return render_template("login_template.html")
 
 
 @app.route("/home/")
 def home():
-    return render_template("home_template.html")
+    if "user" in session:
+        user = session["user"]
+        return render_template("home_template.html")
+    else:
+        return redirect(url_for("login"))
+
+
+@app.route("/logout")
+def logout():
+    session.pop("user", None)
+    return redirect(url_for("login"))
 
 
 @app.route("/qanda_board_select/")
