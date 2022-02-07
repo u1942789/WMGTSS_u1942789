@@ -27,7 +27,7 @@
 {% for question in questions %}
 <div class="question_div">
     <div class="like_box">
-        <input class="like_button" type="image" src="{{ url_for('static',filename='resources/unliked_triangle.png') }}" width="40" height="40"/>
+        <input class="like_button" type="image" src="{{ url_for('static',filename='resources/unliked_triangle_small.png') }}" width="40" height="40"/>
         <p class="like_paragraph">Like</p>
         <p class="like_counter">{{question.number_of_likes }}</p>
     </div>
