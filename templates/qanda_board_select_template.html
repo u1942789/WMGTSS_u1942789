@@ -13,11 +13,13 @@
     <p class="question_name">{{ qanda_board.topic }}</p>
     <p class="asker"> Created by {{ qanda_board.creator }}.</p>
     <form method="GET" action="/{{ qanda_board.qanda_board_id }}">
-        <button type="submit" class="answer_button"> Select </button>
+        <button type="submit" class="answer_button">Select</button>
     </form>
-    <form action="/{{ qanda_board.qanda_board_id }}/delete/">
-        <button class="delete_button">Delete</button>
-    </form>
+    <div class="button_box">
+        <form action="/{{ qanda_board.qanda_board_id }}/delete/">
+            <button class="delete_button">Delete</button>
+        </form>
+    </div>
 </div>
 {% endfor %}
 

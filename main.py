@@ -88,10 +88,10 @@ def login():
 
 @app.route("/home/")
 def home():
-    if "user" in session:
-        return render_template("home_template.html")
-    else:
+    if "user" not in session:
         return redirect(url_for("login"))
+    else:
+        return render_template("home_template.html")
 
 
 @app.route("/logout/")
@@ -143,19 +143,22 @@ def create_qanda():
 
 @app.route("/<int:qanda_board_id>/delete/")
 def delete_qanda(qanda_board_id):
-    for q in qanda_boards:
-        if q.qanda_board_id == qanda_board_id:
-            qanda_boards.remove(q)
-    # Delete all questions associated with the Q&A board after it is deleted.
-    # This is because new Q&A boards would take on the deleted Q&A boards ID, and would take the question data from the
-    # deleted Q&A boards.
-    # Do not loop over a list you are modifying.
-    # This caused only half (rounded down) of the questions to be deleted.
-    # Instead, a copy of the array, "questions", must be used.
-    for question in questions[:]:
-        if question.qanda_board_id == qanda_board_id:
-            questions.remove(question)
-    return redirect(url_for("qanda_board_select"))
+    if "user" in session:
+        for q in qanda_boards:
+            if q.qanda_board_id == qanda_board_id:
+                qanda_boards.remove(q)
+        # Delete all questions associated with the Q&A board after it is deleted.
+        # This is because new Q&A boards would take on the deleted Q&A boards ID, and would take the question data from
+        # the deleted Q&A boards.
+        # Do not loop over a list you are modifying.
+        # This caused only half (rounded down) of the questions to be deleted.
+        # Instead, a copy of the array, "questions", must be used.
+        for question in questions[:]:
+            if question.qanda_board_id == qanda_board_id:
+                questions.remove(question)
+        return redirect(url_for("qanda_board_select"))
+    else:
+        return redirect(url_for("login"))
 
 
 # Need to use "int:" else a String is returned.
@@ -214,17 +217,49 @@ def ask_question(qanda_board_id):
         return redirect(url_for("login"))
 
 
+@app.route("/<qanda_board_id>/<int:question_id>/")
+def question_view(qanda_board_id, question_id):
+    pass
+
+
+@app.route("/<qanda_board_id>/<int:question_id>/answer/")
+def answer_question(qanda_board_id, question_id):
+    if "user" in session:
+        answerer = session["user"]
+        # Only tutors can answer questions.
+        for credential in credentials:
+            # "credential[0]" is the username.
+            if credential[0] == answerer:
+                # This checks that they are a tutor. As tutors have "True" in the third part of their array.
+                if credential[2]:
+                    # If there is no answer to the question currently.
+                    for question in questions:
+                        if question.question_id == question_id:
+                            if question.answer == "":
+                                # Let the tutor answer.
+                                render_template("answer_question_template")
+                            else:
+                                # Redirect to the answer page.
+                                render_template("answer_page_template.html")
+                else:
+                    # Redirect to the answer page.
+                    render_template("answer_page_template.html")
+        # for question in questions:
+        #     if question.question_id == question_id:
+        #         questions.remove(question)
+        # return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
+    else:
+        return redirect(url_for("login"))
+
+
 @app.route("/<qanda_board_id>/<int:question_id>/delete/")
 def delete_question(qanda_board_id, question_id):
-    check_user()
-    for question in questions:
-        if question.question_id == question_id:
-            questions.remove(question)
-    return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
-
-
-def check_user():
-    if "user" not in session:
+    if "user" in session:
+        for question in questions:
+            if question.question_id == question_id:
+                questions.remove(question)
+        return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
+    else:
         return redirect(url_for("login"))
 
 

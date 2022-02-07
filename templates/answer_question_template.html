@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{{ url_for('static',filename='resources/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_style.css') }}">
+    <title>WMG Teaching Support System</title>
+</head>
+<body>
+
+<!-- See form name comments below. -->
+<form id="submit_form" method="POST">
+    <label for="question">Question:</label><br>
+    <!-- Meet requirement character max length for a question. -->
+    <textarea style="width:300px; height:150px;" id="question" name="question" maxlength="256"></textarea><br><br>
+</form>
+
+<form method="GET" action="/{{ qanda_board_id }}/">
+    <button type="submit">Back</button>
+</form>
+
+<!-- The form name is required so that the input can be placed outside the form. This is so that the "Back" button can
+occur before the "Submit" button. This is because back buttons are usually on the left, and progress buttons, such as
+"Submit" are usually on the right.
+Even if this is not universal, it is a shared standard across my website. -->
+<input form="submit_form" type="submit" value="Submit">
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for msg in messages %}
+            <p>{{msg}}</p>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+</body>
+</html>

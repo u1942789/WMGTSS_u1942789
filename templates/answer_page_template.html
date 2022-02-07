@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" href="{{ url_for('static',filename='resources/logo.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static',filename='styles/qanda_board_style.css') }}">
+    <title>WMG Teaching Support System</title>
+</head>
+<body>
+
+<!-- Heading -->
+<div class="heading_div">
+    <p class="heading_paragraph">{{ question.topic }} Q&A</p>
+    <p class="asker"> Asked by {{ question.asker }}</p>
+</div>
+
+<!-- Sorter Buttons -->
+<div class="sorter_div">
+    <button id="initial_button" class="sorter_button" type="button">Oldest</button>
+    <button class="sorter_button" type="button">Newest</button>
+    <button class="sorter_button" type="button">Most Liked</button>
+    <button class="sorter_button" type="button">Least Liked</button>
+    <button class="sorter_button" type="button">Your Comments</button>
+    <button class="sorter_button" type="button">Your Liked Comments</button>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+    <form method="GET" action="/<qanda_board_id>/">
+        <button type="submit" class="back_button">Back to question select...</button>
+    </form>
+    <!-- Not supported. -->
+    <button type="submit" class="ask_button">Leave a comment...</button>
+</div>
+
+</body>
+</html>
