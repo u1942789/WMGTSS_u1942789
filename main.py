@@ -1,4 +1,4 @@
-from flask import Flask, redirect, url_for, render_template, request, session
+from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import datetime
 
 
@@ -43,7 +43,10 @@ questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "Thi
                       ["Student2", "Student3"], [])]
 
 
-credentials = ["Tutor1"]
+credentials = [["Tutor1", "pass"],
+               ["Tutor2", "word"],
+               ["Student1", "stu"],
+               ["Student2", "dent"]]
 
 
 # Have the default path redirect to the login page.
@@ -51,10 +54,30 @@ credentials = ["Tutor1"]
 @app.route("/login/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        session["user"] = username
-        return redirect(url_for("home"))
+        # Check that both of the fields have been filled in.
+        if request.form["username"] and request.form["password"]:
+            username = request.form["username"]
+            password = request.form["password"]
+            usernames = []
+            for credential in credentials:
+                usernames.append(credential[0])
+            if username in usernames:
+                for credential in credentials:
+                    if credential[0] == username:
+                        if credential[1] == password:
+                            session["user"] = username
+                            return redirect(url_for("home"))
+                        else:
+                            print("Wrong password.")
+                            flash("Wrong password.", "info")
+                            return redirect(url_for("login"))
+            else:
+                # Create an account.
+                credentials.append([username, password])
+                session["user"] = username
+                return redirect(url_for("home"))
+        else:
+            return render_template("login_template.html")
     else:
         # If the user is already logged in then redirect to home.
         if "user" in session:
