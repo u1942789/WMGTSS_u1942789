@@ -14,6 +14,7 @@
 </div>
 
 <!-- Sorter Buttons -->
+<!--
 <div class="sorter_div">
     <button id="initial_button" class="sorter_button" type="button">Oldest</button>
     <button class="sorter_button" type="button">Newest</button>
@@ -22,15 +23,18 @@
     <button class="sorter_button" type="button">Your Questions</button>
     <button class="sorter_button" type="button">Your Liked Questions</button>
 </div>
+-->
 
 <!-- Question List -->
 {% for question in questions %}
 <div class="question_div">
+    <!--
     <input class="like_button" type="image" src="{{ url_for('static',filename='resources/unliked_triangle.png') }}" width="40" height="40"/>
     <p class="like_paragraph">Like</p>
     <p class="like_counter">{{question.number_of_likes }}</p>
+    -->
     <p class="question_name">{{ question.name }}</p>
-    <p class="asker"> Asked by {{ question.asker }} on {{question.date}}</p>
+    <p class="asker"> Asked by {{ question.asker }} on {{question.date}}.</p>
     <button class="answer_button">Answer...</button>
     <button class="comment_button">{{question.number_of_comments}} comments...</button>
     <button class="delete_button">Delete</button>
