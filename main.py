@@ -88,8 +88,24 @@ def qanda_board_select():
 def create_qanda():
     if "user" in session:
         if request.method == "POST":
-            topic = request.form["topic"]
-            print("Topic:" + topic)
+            # Check that the topic is not empty.
+            if request.form["topic"]:
+                qanda_board_ids = []
+                for q in qanda_boards:
+                    qanda_board_ids.append(q.qanda_board_id)
+                potential_qanda_board_id = 1
+                while True:
+                    if potential_qanda_board_id in qanda_board_ids:
+                        potential_qanda_board_id += 1
+                    else:
+                        break
+                print("Q&A Board ID: " + str(potential_qanda_board_id))
+                topic = request.form["topic"]
+                print("Topic: " + topic)
+                asker = session["user"]
+                print("Asker: " + asker)
+                qanda_board_object = QAndABoard(potential_qanda_board_id, topic, asker)
+                qanda_boards.append(qanda_board_object)
             return redirect(url_for("qanda_board_select"))
         else:
             return render_template("create_qanda_template.html")

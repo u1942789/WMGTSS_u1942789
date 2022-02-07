@@ -10,6 +10,11 @@ form {
     display: inline;
 }
 
+button {
+    /* Makes buttons more obvious. */
+    cursor: pointer;
+}
+
 /* ================================================================================================ HEADER ========== */
 
 .heading_div {
@@ -68,6 +73,8 @@ form {
 /* ============================================================================================== QUESTION ========== */
 
 .question_div {
+    position:relative;
+
     background-color: #FFF;
 
     border-radius: 16px;
@@ -77,6 +84,17 @@ form {
     padding: 8px;
 
     margin: 18px;
+}
+
+.like_box {
+    display: inline-block;
+
+    text-align: center;
+}
+
+.question_asker_box {
+    padding-left: 12px;
+    display: inline-block;
 }
 
 .like_button {
@@ -103,6 +121,12 @@ form {
 
 .asker {
     font-size: 12px;
+}
+
+.button_box {
+    position:absolute;
+    right: 8px;
+    bottom: 8px;
 }
 
 .answer_button {
