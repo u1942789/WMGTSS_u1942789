@@ -18,6 +18,7 @@ qanda_boards = [QAndABoard(1, "Computer Science", "Tutor1"),
 
 
 class Question:
+    # Set default values because when a question is created, there will be no answer, no likes, and no comments.
     def __init__(self, question_id, qanda_board_id, question, asker, date, answer="", likes=None, comments=None):
         if comments is None:
             comments = []
@@ -140,6 +141,23 @@ def create_qanda():
         return redirect(url_for("login"))
 
 
+@app.route("/<int:qanda_board_id>/delete/")
+def delete_qanda(qanda_board_id):
+    for q in qanda_boards:
+        if q.qanda_board_id == qanda_board_id:
+            qanda_boards.remove(q)
+    # Delete all questions associated with the Q&A board after it is deleted.
+    # This is because new Q&A boards would take on the deleted Q&A boards ID, and would take the question data from the
+    # deleted Q&A boards.
+    # Do not loop over a list you are modifying.
+    # This caused only half (rounded down) of the questions to be deleted.
+    # Instead, a copy of the array, "questions", must be used.
+    for question in questions[:]:
+        if question.qanda_board_id == qanda_board_id:
+            questions.remove(question)
+    return redirect(url_for("qanda_board_select"))
+
+
 # Need to use "int:" else a String is returned.
 @app.route("/<int:qanda_board_id>/")
 def qanda_board(qanda_board_id):
@@ -198,10 +216,16 @@ def ask_question(qanda_board_id):
 
 @app.route("/<qanda_board_id>/<int:question_id>/delete/")
 def delete_question(qanda_board_id, question_id):
+    check_user()
     for question in questions:
         if question.question_id == question_id:
             questions.remove(question)
     return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
+
+
+def check_user():
+    if "user" not in session:
+        return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
