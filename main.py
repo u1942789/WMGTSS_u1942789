@@ -1,45 +1,19 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import datetime
+import sqlite3
+from classes import *
+from database import *
 
 app = Flask(__name__)
 app.secret_key = "havefun"
 
+conn = sqlite3.connect("accounts.db")
+c = conn.cursor()
 
-class QAndABoard:
-    def __init__(self, qanda_board_id, topic, creator):
-        self.qanda_board_id = qanda_board_id
-        self.topic = topic
-        self.creator = creator
-
+initialise_database(c, conn)
 
 qanda_boards = [QAndABoard(1, "Computer Science", "Tutor1"),
                 QAndABoard(2, "Mathematics", "Tutor2")]
-
-
-class Question:
-    # Set default values because when a question is created.
-    # There will be no answer, no answerer, no answer date, no likes, and no comments.
-    def __init__(self, question_id, qanda_board_id, question, asker, date,
-                 answer="", answerer="", answer_date="",
-                 likes=None, comments=None):
-        # Primary key.
-        self.question_id = question_id
-        # Foreign key.
-        self.qanda_board_id = qanda_board_id
-        # Initial data.
-        self.question = question
-        self.asker = asker
-        self.date = date
-        # Answer data.
-        self.answer = answer
-        self.answerer = answerer
-        self.answer_date = answer_date
-        # Likes.
-        self.likes = likes
-        self.number_of_likes = len(self.likes)
-        # Comments.
-        self.comments = comments
-        self.number_of_comments = len(comments)
 
 
 questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "This is the answer on how to use HTML.",
@@ -48,17 +22,10 @@ questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "Thi
                       "", "", ["Student2", "Student3"], [])]
 
 
-class Account:
-    def __init__(self, username, password, is_admin=False):
-        self.username = username
-        self.password = password
-        self.isAdmin = is_admin
-
-
-accounts = [Account("tutor1", "pass", True),
-            Account("yspark", "word", True),
-            Account("Stu1", "stu", False),
-            Account("student2", "dent", False)]
+accounts = [Account("tutor1", "pass", 1),
+            Account("yspark", "word", 1),
+            Account("Stu1", "stu", 0),
+            Account("student2", "dent", 0)]
 
 
 # Have the default path redirect to the login page.
@@ -71,12 +38,12 @@ def login():
             username = request.form["username"]
             password = request.form["password"]
             usernames = []
-            for credential in credentials:
-                usernames.append(credential[0])
+            for account in accounts:
+                usernames.append(account[0])
             if username in usernames:
-                for credential in credentials:
-                    if credential[0] == username:
-                        if credential[1] == password:
+                for account in accounts:
+                    if account[0] == username:
+                        if account[1] == password:
                             session["user"] = username
                             return redirect(url_for("home"))
                         else:
@@ -84,7 +51,7 @@ def login():
                             return redirect(url_for("login"))
             else:
                 # Create an account.
-                credentials.append([username, password])
+                accounts.append([username, password])
                 session["user"] = username
                 return redirect(url_for("home"))
         else:
@@ -265,4 +232,5 @@ def delete_question(qanda_board_id, question_id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    # app.run(debug=True)
+    app.run()
