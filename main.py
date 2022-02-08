@@ -154,29 +154,38 @@ def create_qanda():
             if session["user"] == account.username:
                 # Only tutors can create Q&As.
                 if account.is_admin:
-                    if request.method == "POST":
-                        # Check that the topic is not empty.
-                        if request.form["topic"]:
-                            qanda_board_ids = []
-                            for q in qanda_boards:
-                                qanda_board_ids.append(q.qanda_board_id)
-                            potential_qanda_board_id = 1
-                            while True:
-                                if potential_qanda_board_id in qanda_board_ids:
-                                    potential_qanda_board_id += 1
-                                else:
-                                    break
-                            topic = request.form["topic"]
-                            asker = session["user"]
-                            qanda_board_object = QAndABoard(potential_qanda_board_id, topic, asker)
-                            qanda_boards.append(qanda_board_object)
-                            update_database()
+                    # Make sure the tutor doesn't already have 2 boards.
+                    board_count = 0
+                    for q in qanda_boards:
+                        if q.creator == account.username:
+                            board_count += 1
+                    if board_count <= 1:
+                        if request.method == "POST":
+                            # Check that the topic is not empty.
+                            if request.form["topic"]:
+                                qanda_board_ids = []
+                                for q in qanda_boards:
+                                    qanda_board_ids.append(q.qanda_board_id)
+                                potential_qanda_board_id = 1
+                                while True:
+                                    if potential_qanda_board_id in qanda_board_ids:
+                                        potential_qanda_board_id += 1
+                                    else:
+                                        break
+                                topic = request.form["topic"]
+                                asker = session["user"]
+                                qanda_board_object = QAndABoard(potential_qanda_board_id, topic, asker)
+                                qanda_boards.append(qanda_board_object)
+                                update_database()
+                            else:
+                                flash("Please enter a topic.", "info")
+                                return render_template("create_qanda_template.html")
+                            return redirect(url_for("qanda_board_select"))
                         else:
-                            flash("Please enter a topic.", "info")
                             return render_template("create_qanda_template.html")
-                        return redirect(url_for("qanda_board_select"))
                     else:
-                        return render_template("create_qanda_template.html")
+                        flash("You have already created 2 Q&As.", "info")
+                        return redirect(url_for("qanda_board_select"))
         return redirect(url_for("qanda_board_select"))
 
 
