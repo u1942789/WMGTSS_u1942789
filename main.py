@@ -214,7 +214,7 @@ def view_answer(qanda_board_id, question_id):
     else:
         for question in questions:
             if question.question_id == question_id:
-                return render_template("view_answer_template.html", question=question)
+                return render_template("view_answer_template.html", qanda_board_id=qanda_board_id, question=question)
 
 
 @app.route("/<int:qanda_board_id>/<int:question_id>/answer/", methods=["GET", "POST"])
