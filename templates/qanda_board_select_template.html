@@ -8,11 +8,6 @@
 </head>
 <body>
 
-<!-- Heading -->
-<div class="heading_div">
-    <p class="heading_paragraph">Select Topic</p>
-</div>
-
 {% with messages = get_flashed_messages() %}
     {% if messages %}
         {% for msg in messages %}
@@ -20,6 +15,11 @@
         {% endfor %}
     {% endif %}
 {% endwith %}
+
+<!-- Heading -->
+<div class="heading_div">
+    <p class="heading_paragraph">Select Topic</p>
+</div>
 
 <!-- Topic List -->
 {% for qanda_board in qanda_boards %}
