@@ -29,6 +29,7 @@ def update_accounts_database():
     c.execute("DELETE FROM accounts")
     for account in accounts:
         c.execute("INSERT INTO accounts VALUES (?, ?, ?)", (account.username, account.password, account.is_admin))
+        conn.commit()
     conn.close()
 
 
@@ -48,6 +49,7 @@ def update_qanda_boards_database():
     c.execute("DELETE FROM qanda_boards")
     for q in qanda_boards:
         c.execute("INSERT INTO qanda_boards VALUES (?, ?, ?)", (q.qanda_board_id, q.topic, q.creator))
+        conn.commit()
     conn.close()
 
 
@@ -58,6 +60,7 @@ def update_questions_array():
     questions.clear()
     for row in c:
         questions.append(Question(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]))
+        conn.commit()
     conn.close()
 
 
@@ -68,14 +71,20 @@ def update_questions_database():
     for question in questions:
         c.execute("INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (
             question.question_id, question.qanda_board_id, question.question, question.asker, question.date,
-            question.answer, question.answerer, question.answer_date, question.likes, question.comments))
+            question.answer, question.answerer, question.answer_date, str(question.likes), str(question.comments)))
     conn.close()
 
 
 # Bring up-to-date information from the database into Python.
 update_accounts_array()
-update_questions_array()
 update_qanda_boards_array()
+update_questions_array()
+
+
+def update_database():
+    update_accounts_database()
+    update_qanda_boards_database()
+    update_questions_database()
 
 
 # Have the default path redirect to the login page.
@@ -103,6 +112,7 @@ def login():
                 # Create an account.
                 accounts.append(Account(username, password, 0))
                 session["user"] = username
+                update_database()
                 return redirect(url_for("home"))
         else:
             return render_template("login_template.html")
@@ -142,6 +152,7 @@ def create_qanda():
     else:
         for account in accounts:
             if session["user"] == account.username:
+                # Only tutors can create Q&As.
                 if account.is_admin:
                     if request.method == "POST":
                         # Check that the topic is not empty.
@@ -159,6 +170,7 @@ def create_qanda():
                             asker = session["user"]
                             qanda_board_object = QAndABoard(potential_qanda_board_id, topic, asker)
                             qanda_boards.append(qanda_board_object)
+                            update_database()
                         else:
                             flash("Please enter a topic.", "info")
                             return render_template("create_qanda_template.html")
@@ -188,6 +200,7 @@ def delete_qanda(qanda_board_id):
                     for question in questions[:]:
                         if question.qanda_board_id == qanda_board_id:
                             questions.remove(question)
+                    update_database()
                     return redirect(url_for("qanda_board_select"))
         return redirect(url_for("qanda_board_select"))
 
@@ -235,6 +248,7 @@ def ask_question(qanda_board_id):
                 date = datetime.today().strftime('%d/%m/%Y')
                 question_object = Question(potential_question_id, qanda_board_id, question, asker, date)
                 questions.append(question_object)
+                update_database()
             else:
                 flash("Please enter a question.", "info")
                 return render_template("ask_question_template.html", qanda_board_id=qanda_board_id)
@@ -264,6 +278,7 @@ def answer_question(qanda_board_id, question_id):
                 for question in questions:
                     if question.question_id == question_id:
                         question.answer = request.form["answer"]
+                        update_database()
                 return redirect(url_for("view_answer", qanda_board_id=qanda_board_id, question_id=question_id))
             else:
                 flash("Please enter an answer.", "info")
@@ -289,12 +304,14 @@ def delete_question(qanda_board_id, question_id):
                     for question in questions:
                         if question.question_id == question_id:
                             questions.remove(question)
+                            update_database()
                     return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
                 # Students can delete a question if it is theirs.
                 for question in questions:
                     if question.question_id == question_id:
                         if question.asker == account.username:
                             questions.remove(question)
+                            update_database()
                             return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
         return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
     else:
