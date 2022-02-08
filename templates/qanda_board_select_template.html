@@ -13,6 +13,7 @@
     <p class="heading_paragraph">Select Topic</p>
 </div>
 
+<!-- Topic List -->
 {% for qanda_board in qanda_boards %}
 <div class="question_div">
     <p class="question_name">{{ qanda_board.topic }}</p>
@@ -21,7 +22,7 @@
         <button class="answer_button">Select</button>
     </form>
     <div class="button_box">
-        <form action="/{{ qanda_board.qanda_board_id }}/delete/">
+        <form action="/{{qanda_board.qanda_board_id}}/delete/">
             <button class="delete_button">Delete</button>
         </form>
     </div>

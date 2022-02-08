@@ -23,9 +23,33 @@
     <button class="sorter_button" type="button">Your Liked Comments</button>
 </div>
 
+<div class="answer_div">
+
+    <div class="like_box">
+        <input class="like_button" type="image" src="{{ url_for('static',filename='resources/unliked_triangle_transparent.png') }}" width="40" height="40"/>
+        <p class="like_paragraph">Like</p>
+        <p class="like_counter">0</p>
+    </div>
+
+    <div class="question_asker_box">
+        <p class="question_name">{{question.answer}}</p>
+        <p class="asker">Answered by {{question.answerer}} on {{question.answer_date}}.</p>
+    </div>
+
+    <div class="button_box">
+        <form action="">
+            <button class="answer_button">Reply...</button>
+        </form>
+        <form action="">
+            <button class="delete_button">Delete</button>
+        </form>
+    </div>
+
+</div>
+
 <!-- Footer -->
 <div class="footer">
-    <form method="GET" action="/<qanda_board_id>/">
+    <form method="GET" action="/{{question.qanda_board_id}}/">
         <button type="submit" class="back_button">Back to question select...</button>
     </form>
     <!-- Not supported. -->

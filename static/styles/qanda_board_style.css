@@ -88,6 +88,20 @@ button {
     margin: 18px;
 }
 
+.answer_div {
+    position:relative;
+
+    background-color: #4D79A2;
+
+    border-radius: 16px;
+    border-style: solid;
+    border-width: 2px;
+
+    padding: 8px;
+
+    margin: 18px;
+}
+
 .like_box {
     display: inline-block;
 

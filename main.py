@@ -19,7 +19,7 @@ qanda_boards = [QAndABoard(1, "Computer Science", "Tutor1"),
 
 class Question:
     # Set default values because when a question is created, there will be no answer, no likes, and no comments.
-    def __init__(self, question_id, qanda_board_id, question, asker, date, answer="", likes=None, comments=None):
+    def __init__(self, question_id, qanda_board_id, question, asker, date, answer="", answerer="", answer_date="", likes=None, comments=None):
         if comments is None:
             comments = []
         if likes is None:
@@ -30,6 +30,8 @@ class Question:
         self.asker = asker
         self.date = date
         self.answer = answer
+        self.answerer = answerer
+        self.answer_date = answer_date
 
         self.likes = likes
         self.number_of_likes = len(self.likes)
@@ -39,9 +41,9 @@ class Question:
 
 
 questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "This is the answer on how to use HTML.",
-                      ["Student1", "Student2", "Student3"], []),
+                      "Tutor70", "02/02/2022", ["Student1", "Student2", "Student3"], []),
              Question(2, 1, "Has the assignment been released yet?", "Student2", "15/11/2021", "",
-                      ["Student2", "Student3"], [])]
+                      "", "", ["Student2", "Student3"], [])]
 
 
 credentials = [["Tutor1", "pass", True],
@@ -226,7 +228,7 @@ def answer_question(qanda_board_id, question_id):
                 for question in questions:
                     if question.question_id == question_id:
                         question.answer = request.form["answer"]
-                return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
+                return redirect(url_for("view_answer", qanda_board_id=qanda_board_id, question_id=question_id))
             else:
                 flash("Please enter an answer.", "info")
                 return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
