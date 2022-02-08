@@ -4,9 +4,6 @@ GitHub Link: https://github.com/u1942789/WMGTSS_u1942789.git
 
 Repository of the coursework for assignment 2 of SDLC.
 
-The ".idea" file is needed for the PyCharm IDE that I used when developing the code.
-It should not be needed to run the code, and it should not affect the code.
-
 # Python Libraries Needed:
 - from flask import Flask, redirect, url_for, render_template, request, session, flash
 - from datetime import datetime
