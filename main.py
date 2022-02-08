@@ -1,19 +1,14 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import datetime
-import sqlite3
 from classes import *
 from database import *
 
 app = Flask(__name__)
 app.secret_key = "havefun"
 
-conn = sqlite3.connect("accounts.db")
-c = conn.cursor()
+initialise_database()
 
-initialise_database(c, conn)
-
-qanda_boards = [QAndABoard(1, "Computer Science", "Tutor1"),
-                QAndABoard(2, "Mathematics", "Tutor2")]
+qanda_boards = QAndABoard.get_data()
 
 
 questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "This is the answer on how to use HTML.",
