@@ -18,13 +18,13 @@ def initialise_accounts():
     is_admin integer
     )""")
     conn.commit()
-    c.execute("INSERT INTO accounts VALUES (?, ?, ?)", ('Tutor1', 'password', 1))
+    c.execute("INSERT INTO accounts VALUES (?, ?, ?)", ('Tutor1', 'pass', 1))
     conn.commit()
-    c.execute("INSERT INTO accounts VALUES (?, ?, ?)", ('ypark1', 'pass', 1))
+    c.execute("INSERT INTO accounts VALUES (?, ?, ?)", ('Tutor2', 'word', 1))
     conn.commit()
-    c.execute("INSERT INTO accounts VALUES (?, ?, ?)", ('Student123', '123', 0))
+    c.execute("INSERT INTO accounts VALUES (?, ?, ?)", ('Student1', '1111', 0))
     conn.commit()
-    c.execute("INSERT INTO accounts VALUES (?, ?, ?)", ('stu1', 'stu1', 0))
+    c.execute("INSERT INTO accounts VALUES (?, ?, ?)", ('Student2', '2222', 0))
     conn.commit()
     conn.close()
 
@@ -40,10 +40,10 @@ def initialise_qanda_boards():
     creator text
     )""")
     conn.commit()
-    # c.execute("INSERT INTO qanda_boards VALUES (?, ?, ?)", (1, "Computer Science", 'ypark1'))
-    # conn.commit()
-    # c.execute("INSERT INTO qanda_boards VALUES (?, ?, ?)", (2, 'Mathematics', 'Tutor1'))
-    # conn.commit()
+    c.execute("INSERT INTO qanda_boards VALUES (?, ?, ?)", (1, "Computer Science", 'Tutor1'))
+    conn.commit()
+    c.execute("INSERT INTO qanda_boards VALUES (?, ?, ?)", (2, 'Mathematics', 'Tutor2'))
+    conn.commit()
     conn.close()
 
 
@@ -64,14 +64,14 @@ def initialise_questions():
     likes text,
     comments text
     )""")
-    # conn.commit()
-    # c.execute("INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    #           (1, 1, "How do I use HTML?", "Student1", "13/11/2021", "This is the answer on how to use HTML.",
-    #            "Tutor70", "02/02/2022", str(["Student1", "Student2", "Student3"]), str([])))
-    # conn.commit()
-    # c.execute("INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
-    #           (2, 1, "Has the assignment been released yet?", "Student2", "15/11/2021", "", "", "",
-    #            str(["Student2", "Student3"]), str([])))
+    conn.commit()
+    c.execute("INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              (1, 1, "How do I use HTML?", "Student1", "13/11/2021", "This is the answer on how to use HTML.",
+               "Tutor1", "02/02/2022", str(["Student1", "Student2", "Student3"]), str([])))
+    conn.commit()
+    c.execute("INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+              (2, 1, "Has the assignment been released yet?", "Student2", "15/11/2021", "", "", "",
+               str(["Student2", "Student3"]), str([])))
     conn.commit()
     conn.close()
 
