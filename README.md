@@ -1,5 +1,7 @@
 # WMGTSS_u1942789
 
+GitHub Link: https://github.com/u1942789/WMGTSS_u1942789.git
+
 Repository of the coursework for assignment 2 of SDLC.
 
 The ".idea" file is needed for the PyCharm IDE that I used when developing the code.

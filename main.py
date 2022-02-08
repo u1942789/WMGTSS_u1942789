@@ -97,16 +97,20 @@ def login():
         if request.form["username"] and request.form["password"]:
             username = request.form["username"]
             password = request.form["password"]
+            # Check if the username already exists.
             usernames = []
             for account in accounts:
                 usernames.append(account.username)
             if username in usernames:
                 for account in accounts:
                     if account.username == username:
+                        # If the username exists, then compare passwords.
                         if account.password == password:
+                            # Keep track of the current user.
                             session["user"] = username
                             return redirect(url_for("home"))
                         else:
+                            # Provide a message if the wrong password was entered.
                             flash("Wrong password.", "info")
                             return redirect(url_for("login"))
             else:
