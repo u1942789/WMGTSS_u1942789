@@ -2,7 +2,6 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from datetime import datetime
 import sqlite3
 from classes import QAndABoard, Account, Question
-import pytest
 
 
 # Initialise Flask
