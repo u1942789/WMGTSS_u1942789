@@ -4,6 +4,8 @@ GitHub Link: https://github.com/u1942789/WMGTSS_u1942789.git
 
 Repository of the coursework for assignment 2 of SDLC.
 
+Please see GitHub image.png for sequence diagram.
+
 # Python Libraries Needed:
 - from flask import Flask, redirect, url_for, render_template, request, session, flash
 - from datetime import datetime
