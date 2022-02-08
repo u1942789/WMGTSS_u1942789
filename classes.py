@@ -2,7 +2,7 @@ class Account:
     def __init__(self, username, password, is_admin=0):
         self.username = username
         self.password = password
-        self.isAdmin = is_admin
+        self.is_admin = is_admin
 
 
 class QAndABoard:
@@ -17,7 +17,7 @@ class Question:
     # There will be no answer, no answerer, no answer date, no likes, and no comments.
     def __init__(self, question_id, qanda_board_id, question, asker, date,
                  answer="", answerer="", answer_date="",
-                 likes=None, comments=None):
+                 likes=[], comments=[]):
         # Primary key.
         self.question_id = question_id
         # Foreign key.

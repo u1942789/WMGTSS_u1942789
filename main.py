@@ -2,41 +2,80 @@ from flask import Flask, redirect, url_for, render_template, request, session, f
 from datetime import datetime
 import sqlite3
 from classes import QAndABoard, Account, Question
-from database import initialise_database
 
 
 app = Flask(__name__)
 app.secret_key = "havefun"
 
 
-initialise_database()
-
-
 accounts = []
-conn = sqlite3.connect("accounts.db")
-c = conn.cursor()
-c.execute('SELECT * FROM accounts')
-for row in c:
-    accounts.append(Account(row[0], row[1], row[2]))
-conn.close()
-
-
 qanda_boards = []
-conn = sqlite3.connect("qanda_boards.db")
-c = conn.cursor()
-c.execute('SELECT * FROM qanda_boards')
-for row in c:
-    qanda_boards.append(QAndABoard(row[0], row[1], row[2]))
-conn.close()
-
-
 questions = []
-conn = sqlite3.connect("questions.db")
-c = conn.cursor()
-c.execute('SELECT * FROM questions')
-for row in c:
-    questions.append(Question(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]))
-conn.close()
+
+
+def update_accounts_array():
+    accounts.clear()
+    conn = sqlite3.connect("accounts.db")
+    c = conn.cursor()
+    c.execute('SELECT * FROM accounts')
+    for row in c:
+        accounts.append(Account(row[0], row[1], row[2]))
+    conn.close()
+
+
+def update_accounts_database():
+    conn = sqlite3.connect("accounts.db")
+    c = conn.cursor()
+    c.execute("DELETE FROM accounts")
+    for account in accounts:
+        c.execute("INSERT INTO accounts VALUES (?, ?, ?)", (account.username, account.password, account.is_admin))
+    conn.close()
+
+
+def update_qanda_boards_array():
+    qanda_boards.clear()
+    conn = sqlite3.connect("qanda_boards.db")
+    c = conn.cursor()
+    c.execute('SELECT * FROM qanda_boards')
+    for row in c:
+        qanda_boards.append(QAndABoard(row[0], row[1], row[2]))
+    conn.close()
+
+
+def update_qanda_boards_database():
+    conn = sqlite3.connect("qanda_boards.db")
+    c = conn.cursor()
+    c.execute("DELETE FROM qanda_boards")
+    for q in qanda_boards:
+        c.execute("INSERT INTO qanda_boards VALUES (?, ?, ?)", (q.qanda_board_id, q.topic, q.creator))
+    conn.close()
+
+
+def update_questions_array():
+    conn = sqlite3.connect("questions.db")
+    c = conn.cursor()
+    c.execute('SELECT * FROM questions')
+    questions.clear()
+    for row in c:
+        questions.append(Question(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]))
+    conn.close()
+
+
+def update_questions_database():
+    conn = sqlite3.connect("questions.db")
+    c = conn.cursor()
+    c.execute("DELETE FROM questions")
+    for question in questions:
+        c.execute("INSERT INTO questions VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", (
+            question.question_id, question.qanda_board_id, question.question, question.asker, question.date,
+            question.answer, question.answerer, question.answer_date, question.likes, question.comments))
+    conn.close()
+
+
+# Bring up-to-date information from the database into Python.
+update_accounts_array()
+update_questions_array()
+update_qanda_boards_array()
 
 
 # Have the default path redirect to the login page.
@@ -50,11 +89,11 @@ def login():
             password = request.form["password"]
             usernames = []
             for account in accounts:
-                usernames.append(account[0])
+                usernames.append(account.username)
             if username in usernames:
                 for account in accounts:
-                    if account[0] == username:
-                        if account[1] == password:
+                    if account.username == username:
+                        if account.password == password:
                             session["user"] = username
                             return redirect(url_for("home"))
                         else:
@@ -62,7 +101,7 @@ def login():
                             return redirect(url_for("login"))
             else:
                 # Create an account.
-                accounts.append([username, password])
+                accounts.append(Account(username, password, 0))
                 session["user"] = username
                 return redirect(url_for("home"))
         else:
@@ -129,18 +168,22 @@ def delete_qanda(qanda_board_id):
     if "user" not in session:
         return redirect(url_for("login"))
     else:
-        for q in qanda_boards:
-            if q.qanda_board_id == qanda_board_id:
-                qanda_boards.remove(q)
-        # Delete all questions associated with the Q&A board after it is deleted.
-        # This is because new Q&A boards would take on the deleted Q&A boards ID, and would take the question data from
-        # the deleted Q&A boards.
-        # Do not loop over a list you are modifying.
-        # This caused only half (rounded down) of the questions to be deleted.
-        # Instead, a copy of the array, "questions", must be used.
-        for question in questions[:]:
-            if question.qanda_board_id == qanda_board_id:
-                questions.remove(question)
+        for account in accounts:
+            if session["user"] == account.username:
+                if account.is_admin:
+                    for q in qanda_boards:
+                        if q.qanda_board_id == qanda_board_id:
+                            qanda_boards.remove(q)
+                    # Delete all questions associated with the Q&A board after it is deleted.
+                    # This is because new Q&A boards would take on the deleted Q&A boards ID, and would take the
+                    # question data from the deleted Q&A boards.
+                    # Do not loop over a list you are modifying.
+                    # This caused only half (rounded down) of the questions to be deleted.
+                    # Instead, a copy of the array, "questions", must be used.
+                    for question in questions[:]:
+                        if question.qanda_board_id == qanda_board_id:
+                            questions.remove(question)
+                    return redirect(url_for("qanda_board_select"))
         return redirect(url_for("qanda_board_select"))
 
 
@@ -234,14 +277,25 @@ def answer_question(qanda_board_id, question_id):
 @app.route("/<int:qanda_board_id>/<int:question_id>/delete/")
 def delete_question(qanda_board_id, question_id):
     if "user" in session:
-        for question in questions:
-            if question.question_id == question_id:
-                questions.remove(question)
+        for account in accounts:
+            if session["user"] == account.username:
+                # Tutors can delete all questions.
+                if account.is_admin:
+                    for question in questions:
+                        if question.question_id == question_id:
+                            questions.remove(question)
+                    return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
+                # Students can delete a question if it is theirs.
+                for question in questions:
+                    if question.question_id == question_id:
+                        if question.asker == account.username:
+                            questions.remove(question)
+                            return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
         return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
     else:
         return redirect(url_for("login"))
 
 
 if __name__ == "__main__":
-    # app.run(debug=True)
-    app.run()
+    app.run(debug=True)
+    # app.run()
