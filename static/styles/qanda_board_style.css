@@ -149,6 +149,18 @@ button {
     font-size: 12px;
 }
 
+/* Answered button is blue if there is an answer.*/
+.answered_button {
+    background-color: #4D79A2;
+
+    border-color: #000;
+    border-radius: 4px;
+    border-style: solid;
+
+    font-family: "Verdana";
+    font-size: 12px;
+}
+
 .comment_button {
     background-color: #747576;
 

@@ -40,7 +40,13 @@
 
     <div class="button_box">
         <form action="/{{question.qanda_board_id}}/{{question.question_id}}/answer/">
-            <button class="answer_button">Answer...</button>
+            <!-- If there is no answer, then colour the button grey. -->
+            {% if question.answer == "" %}
+                <button class="answer_button">Answer...</button>
+            {% else %}
+            <!-- If there is an answer, then colour it blue. -->
+                <button class="answered_button">Answer...</button>
+            {% endif %}
         </form>
         <button class="comment_button">{{question.number_of_comments}} comments...</button>
         <form action="/{{question.qanda_board_id}}/{{question.question_id}}/delete/">

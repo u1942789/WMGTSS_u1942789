@@ -171,7 +171,7 @@ def qanda_board(qanda_board_id):
                     if question.qanda_board_id == qanda_board_id:
                         valid_questions.append(question)
                 # Pass the chosen Q&A board as well as the list of all valid questions.
-                return render_template("qanda_board_template.html", qanda_board=q, questions=valid_questions)
+                return render_template("qanda_board_template.html", username=session["user"], qanda_board=q, questions=valid_questions)
         # If the passed ID is not found as a board, then redirect to "home".
         # Could create an error 404 page later.
         return redirect(url_for("home"))
@@ -239,7 +239,6 @@ def answer_question(qanda_board_id, question_id):
                         return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
                     else:
                         return redirect(url_for("view_answer", qanda_board_id=qanda_board_id, question_id=question_id))
-
 
 
 @app.route("/<int:qanda_board_id>/<int:question_id>/delete/")
