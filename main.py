@@ -1,9 +1,8 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import datetime
 
-
 app = Flask(__name__)
-app.secret_key = "ireallydidtrymybest"
+app.secret_key = "havefun"
 
 
 class QAndABoard:
@@ -18,24 +17,27 @@ qanda_boards = [QAndABoard(1, "Computer Science", "Tutor1"),
 
 
 class Question:
-    # Set default values because when a question is created, there will be no answer, no likes, and no comments.
-    def __init__(self, question_id, qanda_board_id, question, asker, date, answer="", answerer="", answer_date="", likes=None, comments=None):
-        if comments is None:
-            comments = []
-        if likes is None:
-            likes = []
+    # Set default values because when a question is created.
+    # There will be no answer, no answerer, no answer date, no likes, and no comments.
+    def __init__(self, question_id, qanda_board_id, question, asker, date,
+                 answer="", answerer="", answer_date="",
+                 likes=None, comments=None):
+        # Primary key.
         self.question_id = question_id
-        self. qanda_board_id = qanda_board_id
+        # Foreign key.
+        self.qanda_board_id = qanda_board_id
+        # Initial data.
         self.question = question
         self.asker = asker
         self.date = date
+        # Answer data.
         self.answer = answer
         self.answerer = answerer
         self.answer_date = answer_date
-
+        # Likes.
         self.likes = likes
         self.number_of_likes = len(self.likes)
-
+        # Comments.
         self.comments = comments
         self.number_of_comments = len(comments)
 
@@ -46,10 +48,17 @@ questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "Thi
                       "", "", ["Student2", "Student3"], [])]
 
 
-credentials = [["Tutor1", "pass", True],
-               ["Tutor2", "word", True],
-               ["Student1", "stu", False],
-               ["Student2", "dent", False]]
+class Account:
+    def __init__(self, username, password, is_admin=False):
+        self.username = username
+        self.password = password
+        self.isAdmin = is_admin
+
+
+accounts = [Account("tutor1", "pass", True),
+            Account("yspark", "word", True),
+            Account("Stu1", "stu", False),
+            Account("student2", "dent", False)]
 
 
 # Have the default path redirect to the login page.
@@ -171,7 +180,8 @@ def qanda_board(qanda_board_id):
                     if question.qanda_board_id == qanda_board_id:
                         valid_questions.append(question)
                 # Pass the chosen Q&A board as well as the list of all valid questions.
-                return render_template("qanda_board_template.html", username=session["user"], qanda_board=q, questions=valid_questions)
+                return render_template("qanda_board_template.html", username=session["user"], qanda_board=q,
+                                       questions=valid_questions)
         # If the passed ID is not found as a board, then redirect to "home".
         # Could create an error 404 page later.
         return redirect(url_for("home"))
@@ -231,12 +241,14 @@ def answer_question(qanda_board_id, question_id):
                 return redirect(url_for("view_answer", qanda_board_id=qanda_board_id, question_id=question_id))
             else:
                 flash("Please enter an answer.", "info")
-                return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
+                return render_template("answer_question_template.html", qanda_board_id=qanda_board_id,
+                                       question_id=question_id)
         else:
             for question in questions:
                 if question.question_id == question_id:
                     if question.answer == "":
-                        return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
+                        return render_template("answer_question_template.html", qanda_board_id=qanda_board_id,
+                                               question_id=question_id)
                     else:
                         return redirect(url_for("view_answer", qanda_board_id=qanda_board_id, question_id=question_id))
 
