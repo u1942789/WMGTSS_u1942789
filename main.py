@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 app = Flask(__name__)
-app.secret_key = "please"
+app.secret_key = "ireallydidtrymybest"
 
 
 class QAndABoard:
@@ -206,11 +206,13 @@ def ask_question(qanda_board_id):
 
 
 @app.route("/<int:qanda_board_id>/<int:question_id>/")
-def answer_view(qanda_board_id, question_id):
+def view_answer(qanda_board_id, question_id):
     if "user" not in session:
         return redirect(url_for("login"))
     else:
-        pass
+        for question in questions:
+            if question.question_id == question_id:
+                return render_template("view_answer_template.html", question=question)
 
 
 @app.route("/<int:qanda_board_id>/<int:question_id>/answer/", methods=["GET", "POST"])
@@ -229,7 +231,13 @@ def answer_question(qanda_board_id, question_id):
                 flash("Please enter an answer.", "info")
                 return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
         else:
-            return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
+            for question in questions:
+                if question.question_id == question_id:
+                    if question.answer == "":
+                        return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
+                    else:
+                        return redirect(url_for("view_answer", qanda_board_id=qanda_board_id, question_id=question_id))
+
 
 
 @app.route("/<int:qanda_board_id>/<int:question_id>/delete/")
