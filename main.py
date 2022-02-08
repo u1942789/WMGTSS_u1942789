@@ -3,7 +3,7 @@ from datetime import datetime
 
 
 app = Flask(__name__)
-app.secret_key = "pleasecanthisbeagoodsubmission"
+app.secret_key = "please"
 
 
 class QAndABoard:
@@ -69,7 +69,6 @@ def login():
                             session["user"] = username
                             return redirect(url_for("home"))
                         else:
-                            print("Wrong password.")
                             flash("Wrong password.", "info")
                             return redirect(url_for("login"))
             else:
@@ -102,15 +101,17 @@ def logout():
 
 @app.route("/qanda_board_select/")
 def qanda_board_select():
-    if "user" in session:
-        return render_template("qanda_board_select_template.html", qanda_boards=qanda_boards)
-    else:
+    if "user" not in session:
         return redirect(url_for("login"))
+    else:
+        return render_template("qanda_board_select_template.html", qanda_boards=qanda_boards)
 
 
 @app.route("/qanda_board_select/create_qanda/", methods=['GET', 'POST'])
 def create_qanda():
-    if "user" in session:
+    if "user" not in session:
+        return redirect(url_for("login"))
+    else:
         if request.method == "POST":
             # Check that the topic is not empty.
             if request.form["topic"]:
@@ -123,27 +124,22 @@ def create_qanda():
                         potential_qanda_board_id += 1
                     else:
                         break
-                print("Q&A Board ID: " + str(potential_qanda_board_id))
                 topic = request.form["topic"]
-                print("Topic: " + topic)
                 asker = session["user"]
-                print("Asker: " + asker)
                 qanda_board_object = QAndABoard(potential_qanda_board_id, topic, asker)
                 qanda_boards.append(qanda_board_object)
             else:
-                print("Please enter a topic.")
                 flash("Please enter a topic.", "info")
-                return render_template("create_qanda_template.html")
             return redirect(url_for("qanda_board_select"))
         else:
             return render_template("create_qanda_template.html")
-    else:
-        return redirect(url_for("login"))
 
 
 @app.route("/<int:qanda_board_id>/delete/")
 def delete_qanda(qanda_board_id):
-    if "user" in session:
+    if "user" not in session:
+        return redirect(url_for("login"))
+    else:
         for q in qanda_boards:
             if q.qanda_board_id == qanda_board_id:
                 qanda_boards.remove(q)
@@ -157,14 +153,14 @@ def delete_qanda(qanda_board_id):
             if question.qanda_board_id == qanda_board_id:
                 questions.remove(question)
         return redirect(url_for("qanda_board_select"))
-    else:
-        return redirect(url_for("login"))
 
 
 # Need to use "int:" else a String is returned.
 @app.route("/<int:qanda_board_id>/")
 def qanda_board(qanda_board_id):
-    if "user" in session:
+    if "user" not in session:
+        return redirect(url_for("login"))
+    else:
         for q in qanda_boards:
             if q.qanda_board_id == qanda_board_id:
                 valid_questions = []
@@ -177,13 +173,13 @@ def qanda_board(qanda_board_id):
         # If the passed ID is not found as a board, then redirect to "home".
         # Could create an error 404 page later.
         return redirect(url_for("home"))
-    else:
-        return redirect(url_for("login"))
 
 
 @app.route("/<int:qanda_board_id>/ask_question/", methods=['GET', 'POST'])
 def ask_question(qanda_board_id):
-    if "user" in session:
+    if "user" not in session:
+        return redirect(url_for("login"))
+    else:
         if request.method == "POST":
             # Check that the question is not empty.
             if request.form["question"]:
@@ -196,63 +192,47 @@ def ask_question(qanda_board_id):
                         potential_question_id += 1
                     else:
                         break
-                print("Question ID: " + str(potential_question_id))
-                print("Q&A Board ID: " + str(qanda_board_id))
                 question = request.form["question"]
-                print("Question: " + question)
                 asker = session["user"]
-                print("Asker: " + asker)
                 date = datetime.today().strftime('%d/%m/%Y')
-                print("Date: " + date)
                 question_object = Question(potential_question_id, qanda_board_id, question, asker, date)
                 questions.append(question_object)
             else:
-                print("Please enter a question.")
                 flash("Please enter a question.", "info")
-                return render_template("ask_question_template.html")
+                return render_template("ask_question_template.html", qanda_board_id=qanda_board_id)
             return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
         else:
-            return render_template("ask_question_template.html")
-    else:
+            return render_template("ask_question_template.html", qanda_board_id=qanda_board_id)
+
+
+@app.route("/<int:qanda_board_id>/<int:question_id>/")
+def answer_view(qanda_board_id, question_id):
+    if "user" not in session:
         return redirect(url_for("login"))
+    else:
+        pass
 
 
-@app.route("/<qanda_board_id>/<int:question_id>/")
-def question_view(qanda_board_id, question_id):
-    pass
-
-
-@app.route("/<qanda_board_id>/<int:question_id>/answer/")
+@app.route("/<int:qanda_board_id>/<int:question_id>/answer/", methods=["GET", "POST"])
 def answer_question(qanda_board_id, question_id):
-    if "user" in session:
-        answerer = session["user"]
-        # Only tutors can answer questions.
-        for credential in credentials:
-            # "credential[0]" is the username.
-            if credential[0] == answerer:
-                # This checks that they are a tutor. As tutors have "True" in the third part of their array.
-                if credential[2]:
-                    # If there is no answer to the question currently.
-                    for question in questions:
-                        if question.question_id == question_id:
-                            if question.answer == "":
-                                # Let the tutor answer.
-                                render_template("answer_question_template")
-                            else:
-                                # Redirect to the answer page.
-                                render_template("answer_page_template.html")
-                else:
-                    # Redirect to the answer page.
-                    render_template("answer_page_template.html")
-        # for question in questions:
-        #     if question.question_id == question_id:
-        #         questions.remove(question)
-        # return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
-    else:
+    if "user" not in session:
         return redirect(url_for("login"))
+    else:
+        if request.method == "POST":
+            # Check the answer is not empty.
+            if request.form["answer"]:
+                for question in questions:
+                    if question.question_id == question_id:
+                        question.answer = request.form["answer"]
+                return redirect(url_for("qanda_board", qanda_board_id=qanda_board_id))
+            else:
+                flash("Please enter an answer.", "info")
+                return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
+        else:
+            return render_template("answer_question_template.html", qanda_board_id=qanda_board_id, question_id=question_id)
 
 
-@app.route("/<qanda_board_id>/<int:question_id>/delete/")
+@app.route("/<int:qanda_board_id>/<int:question_id>/delete/")
 def delete_question(qanda_board_id, question_id):
     if "user" in session:
         for question in questions:
