@@ -11,7 +11,6 @@ It should not be needed to run the code, and it should not affect the code.
 - from flask import Flask, redirect, url_for, render_template, request, session, flash
 - from datetime import datetime
 - import sqlite3
-- import pytest
 
 # Account Permissions
 There are 2 tutor/admin accounts set up, and new admin accounts cannot be added currently.
@@ -33,3 +32,5 @@ Two other student accounts also exist:
 
 - Username: Student2
 - Password: 2222
+
+Comments and likes are not currently supported for the Q&A board.
