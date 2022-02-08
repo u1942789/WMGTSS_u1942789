@@ -140,27 +140,32 @@ def create_qanda():
     if "user" not in session:
         return redirect(url_for("login"))
     else:
-        if request.method == "POST":
-            # Check that the topic is not empty.
-            if request.form["topic"]:
-                qanda_board_ids = []
-                for q in qanda_boards:
-                    qanda_board_ids.append(q.qanda_board_id)
-                potential_qanda_board_id = 1
-                while True:
-                    if potential_qanda_board_id in qanda_board_ids:
-                        potential_qanda_board_id += 1
+        for account in accounts:
+            if session["user"] == account.username:
+                if account.is_admin:
+                    if request.method == "POST":
+                        # Check that the topic is not empty.
+                        if request.form["topic"]:
+                            qanda_board_ids = []
+                            for q in qanda_boards:
+                                qanda_board_ids.append(q.qanda_board_id)
+                            potential_qanda_board_id = 1
+                            while True:
+                                if potential_qanda_board_id in qanda_board_ids:
+                                    potential_qanda_board_id += 1
+                                else:
+                                    break
+                            topic = request.form["topic"]
+                            asker = session["user"]
+                            qanda_board_object = QAndABoard(potential_qanda_board_id, topic, asker)
+                            qanda_boards.append(qanda_board_object)
+                        else:
+                            flash("Please enter a topic.", "info")
+                            return render_template("create_qanda_template.html")
+                        return redirect(url_for("qanda_board_select"))
                     else:
-                        break
-                topic = request.form["topic"]
-                asker = session["user"]
-                qanda_board_object = QAndABoard(potential_qanda_board_id, topic, asker)
-                qanda_boards.append(qanda_board_object)
-            else:
-                flash("Please enter a topic.", "info")
-            return redirect(url_for("qanda_board_select"))
-        else:
-            return render_template("create_qanda_template.html")
+                        return render_template("create_qanda_template.html")
+        return redirect(url_for("qanda_board_select"))
 
 
 @app.route("/<int:qanda_board_id>/delete/")
