@@ -1,6 +1,3 @@
-import sqlite3
-
-
 class Account:
     def __init__(self, username, password, is_admin=0):
         self.username = username
@@ -13,10 +10,6 @@ class QAndABoard:
         self.qanda_board_id = qanda_board_id
         self.topic = topic
         self.creator = creator
-
-    def get_data(self):
-        conn = sqlite3.connect("qanda_boards.db")
-        c = conn.cursor()
 
 
 class Question:

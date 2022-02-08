@@ -1,26 +1,42 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
 from datetime import datetime
-from classes import *
-from database import *
+import sqlite3
+from classes import QAndABoard, Account, Question
+from database import initialise_database
+
 
 app = Flask(__name__)
 app.secret_key = "havefun"
 
+
 initialise_database()
 
-qanda_boards = QAndABoard.get_data()
+
+accounts = []
+conn = sqlite3.connect("accounts.db")
+c = conn.cursor()
+c.execute('SELECT * FROM accounts')
+for row in c:
+    accounts.append(Account(row[0], row[1], row[2]))
+conn.close()
 
 
-questions = [Question(1, 1, "How do I use HTML?", "Student1", "13/11/2021", "This is the answer on how to use HTML.",
-                      "Tutor70", "02/02/2022", ["Student1", "Student2", "Student3"], []),
-             Question(2, 1, "Has the assignment been released yet?", "Student2", "15/11/2021", "",
-                      "", "", ["Student2", "Student3"], [])]
+qanda_boards = []
+conn = sqlite3.connect("qanda_boards.db")
+c = conn.cursor()
+c.execute('SELECT * FROM qanda_boards')
+for row in c:
+    qanda_boards.append(QAndABoard(row[0], row[1], row[2]))
+conn.close()
 
 
-accounts = [Account("tutor1", "pass", 1),
-            Account("yspark", "word", 1),
-            Account("Stu1", "stu", 0),
-            Account("student2", "dent", 0)]
+questions = []
+conn = sqlite3.connect("questions.db")
+c = conn.cursor()
+c.execute('SELECT * FROM questions')
+for row in c:
+    questions.append(Question(row[0], row[1], row[2], row[3], row[4], row[5], row[6], row[7], row[8], row[9]))
+conn.close()
 
 
 # Have the default path redirect to the login page.
